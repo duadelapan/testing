@@ -27,3 +27,13 @@ jobs:
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
+      - name: check file changed
+        id: changed-file
+        uses: tj-actions/changed-files@v33
+        with:
+          files: |
+            ${{ github.actor }}.txt
+      - name: error if other change
+        if: steps.changed-file.outputs.only_changed == 'false'
+        run: |
+          echo "Only ${{ github.actor }}.txt file can be changed"
